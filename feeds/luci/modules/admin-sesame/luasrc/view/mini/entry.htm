@@ -1,0 +1,51 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	$Id$
+	
+-%>
+
+
+<html>
+<head></head>
+<body>
+<h5 align="right" >Password:<%=uci_pass%></h5>
+
+<br>
+
+ <div style="background-color:#CFCFCF;left:30%;position:absolute;font-size:30px">
+  <form action="<%=REQUEST_URI%>" method="POST">
+     <br>
+    <fieldset ><legend>LED Control Test. </legend><fieldset >
+          
+	<br>
+     LED Status:<textaera align="center" style="background-color:#CFCFCF;
+           color:<% if led_st== "ON" then print("Blue") else print("Red") end %> ">
+            <%= led_st %></textaera>
+	<br><br>
+       Password:
+      <input id="entry_password" type="password" name="password" style="width:220px;height:50px;font-size:50px"/>
+      <br>
+      <br>Command:
+      <!--
+       <input type="submit" value="OFF" name="ledtoggle"    style="width:100px;height:60px" />
+       <input type="submit" value="Toggle" name="ledtoggle" style="width:100px;height:60px" />
+       -->
+       <input type="submit" value="GO" name="ledtoggle"  style="width:100px;height:60px;font-size:30px"/>
+       <textaera align="center" style="color:Yellow "> <%= msg %></textaera>
+       <br>
+           </fieldset></fieldset>
+
+  </form>    
+         </div>                                                                             
+
+
+

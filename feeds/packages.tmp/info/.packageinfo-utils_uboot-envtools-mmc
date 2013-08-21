@@ -1,0 +1,19 @@
+Source-Makefile: feeds/packages/utils/uboot-envtools-mmc/Makefile
+Package: uboot-envtools-mmc
+Version: 20081215-1.1
+Depends: +libc +USE_EGLIBC:librt +USE_EGLIBC:libpthread +zlib
+Menu-Depends: 
+Provides: 
+Section: utils
+Category: Utilities
+Title: read/modify U-Boot bootloader environment in MMC flash
+Maintainer: 
+Source: uboot-envtools_20081215.orig.tar.gz
+Type: ipkg
+Description:  This package includes tools to read and modify U-Boot bootloader environment.
+ This package is patched to to allow reading/writing to block devices.
+http://www.denx.de/wiki/U-Boot
+
+@@
+
+

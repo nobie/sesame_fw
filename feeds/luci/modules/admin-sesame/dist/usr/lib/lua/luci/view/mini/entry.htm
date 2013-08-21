@@ -1,0 +1,95 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	$Id$
+	
+-%>
+<%+header%>
+
+<%
+local http = require "luci.http"
+local led = tonumber(luci.sys.exec("cat /sys/class/leds/tp-link\:blue\:system/brightness"))
+local led_st = "ON"
+
+local btn = luci.http.formvalue("ledtoggle")
+
+if btn == "ON" then
+   if led == 0 then
+   
+    luci.sys.exec("echo 255 > /sys/class/leds/tp-link\:blue\:system/brightness")
+   end
+   led_st = "ON"
+
+ elseif btn == "OFF" then
+   if led ~= 0 then
+     luci.sys.exec("echo 0 > /sys/class/leds/tp-link\:blue\:system/brightness")
+   end
+   led_st = "OFF"
+
+ elseif btn == "Toggle" then
+
+  if led == 0 then
+     luci.sys.exec("echo 255 > /sys/class/leds/tp-link\:blue\:system/brightness")
+      led_st = "ON"
+      tt = "to on"
+  else
+     luci.sys.exec("echo 0 > /sys/class/leds/tp-link\:blue\:system/brightness")
+      led_st = "OFF"
+    tt = "to off"
+  end
+
+ else
+
+  if led == "0" then
+      led_st = "OFF"
+  else
+      led_st = "ON"
+  end
+
+end
+
+
+
+
+et=luci.http.getenv("HTTP_USER_AGENT")
+
+
+%>
+ <div style="background-color:#CFCFCF;left:30%;position:absolute">
+  <form action="/cgi-bin/luci/test" method="POST">
+     
+    <fieldset ><legend>LED ON/OFF Switch</legend><fieldset >
+          
+<!--
+  <%= t %>
+   <input type=text name=textfield />
+
+     <input type="submit" value="Click Me!" />
+     <br>
+     <br>   
+    LED status:<%= led %>     
+      <br><%= type(led)..led..btn%><br> 
+-->
+      <br>Control:
+       <input type="submit" value="ON" name="ledtoggle"     style="width:100px;height:60px"/>
+       <input type="submit" value="OFF" name="ledtoggle"    style="width:100px;height:60px" />
+       <input type="submit" value="Toggle" name="ledtoggle" style="width:100px;height:60px" />
+       <br><br>
+       LED Status:<textaera align="center" style="background-color:#CFCFCF;
+           color:<% if led_st== "ON" then print("Blue") else print("Red") end %> ">
+            <%= led_st %></textaera>
+           </fieldset></fieldset>
+
+  </form>     
+         </div>                                                                              
+
+
+

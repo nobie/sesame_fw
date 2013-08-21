@@ -1,0 +1,57 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	$Id$
+	
+-%>
+
+
+<html>
+<head></head>
+<body>
+<!-- 
+<status><%=led_st%></status>
+<message><%=msg%></message>
+-->
+
+<h5 align="right" >Password:<%=passcode%></h5>
+
+<br>
+
+ <div style="background-color:#CFCFCF;left:30%;position:absolute;font-size:30px">
+  <form action="<%=REQUEST_URI%>" method="POST">
+     <br>
+    <fieldset ><legend>LED Control Test: 
+         <textaera name="msg" style="color:Yellow "> <%= msg %></textaera>
+     </legend><fieldset >
+          
+	<br>
+     LED Status:<textaera align="center" name="status" style="color:<% if led_st== "ON" then print("Blue") else print("Red") end %> ">
+            <%= led_st %></textaera>
+	<br><br>
+       Password:
+      <input id="entry_password" type="password" name="password" style="width:200px;font-size:40px"/>
+      <br>
+      <br>Access:
+      <!--
+       <input type="submit" value="OFF" name="ledtoggle"    style="width:100px;height:60px" />
+       <input type="submit" value="Toggle" name="ledtoggle" style="width:100px;height:60px" />
+       -->
+       <input type="submit" value="SW" name="ledtoggle"  style="width:100px;height:60px;font-size:30px"/>
+       <input type="submit" value="GO" name="ledtoggle"  style="width:100px;height:60px;font-size:30px"/>
+       <br>
+           </fieldset></fieldset>
+
+  </form>    
+         </div>                                                                             
+
+
+

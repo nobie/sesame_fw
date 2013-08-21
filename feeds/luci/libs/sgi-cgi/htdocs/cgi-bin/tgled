@@ -1,0 +1,96 @@
+#! /usr/bin/haserl
+conten-type:text/html
+
+
+<% #define a user function
+ table_element(){
+   echo "<td bgcolor=\"$1\">$1</td>"
+ }
+ led_on(){
+   echo 255 > /sys/class/leds/tp-link\:blue\:system/brightness
+ }
+
+ led_off (){
+    echo 0 > /sys/class/leds/tp-link\:blue\:system/brightness
+ }
+
+# local led_vl
+# local led_st
+ led_st="ON"
+ led_vl=$(cat /sys/class/leds/tp-link\:blue\:system/brightness) 
+
+ if [ "$FORM_ledtoggle"x = "ON"x ]; then
+    if [ "$led_vl" = "0" ]; then
+     echo 255 > /sys/class/leds/tp-link\:blue\:system/brightness
+    fi  
+    led_st="ON"
+ elif [ "$FORM_ledtoggle"x = "OFF"x ]; then
+    if [ "$led_vl" != "0" ]; then
+     echo 0 > /sys/class/leds/tp-link\:blue\:system/brightness
+    fi   
+    led_st="OFF"
+ elif [ "$FORM_ledtoggle"x = "Toggle"x ]; then
+
+   if [ "$led_vl" = "0" ]; then
+     echo 255 > /sys/class/leds/tp-link\:blue\:system/brightness
+     led_st="ON"
+   else
+     echo 0 > /sys/class/leds/tp-link\:blue\:system/brightness
+     led_st="OFF"
+   fi
+ else
+   if [ "$led_vl" = "0" ]; then
+     led_st="OFF"
+   els 
+     led_st="ON"
+   fi
+ fi
+
+
+%>
+
+<html>
+   <body>
+     <table border=1>
+<!--   <tr>
+       <% for a in Red Blue Yellow Cyan; do %>
+           <td bgcolor="<% echo -n "$a" %>"><% echo -n "$a" %></td>
+           <% done %>
+      </tr>
+-->
+      <tr>
+      <% for a in Cyan Yellow Blue Red; do%>
+          <% table_element $a %>
+          <% done %>
+       </tr>
+      </table>
+      <%# env %>
+      <br>
+     <form action="<% echo -n $SCRIPT_NAME %>" method="POST">
+     <div style="background-color:#CFCFCF;left:30%;position:absolute">
+
+     <fieldset ><legend>LED ON/OFF Switch</legend><fieldset >
+<!--
+           <% # Do some basic validation of FORM_textfield
+            # To prevent common web attacks
+        FORM_textfield=$( echo "$FORM_textfield" | sed "s/[^A-Za-z0-9 ]//g" )
+           %>
+          <input type=text name=textfield
+          Value="<% echo -n "$FORM_textfield" | tr a-z A-Z %>" cols=20>
+<button type="button">Click Me!</button>
+     <%= $FORM_ledtoggle %>
+-->
+                <br>Control:
+                <input type="submit" value="ON" name="ledtoggle"     style="width:100px;height:60px"/>
+                <input type="submit" value="OFF" name="ledtoggle"    style="width:100px;height:60px" />
+                <input type="submit" value="Toggle" name="ledtoggle" style="width:100px;height:60px" />
+              <br><br> 
+              LED Status:<textaera align="center" style="background-color:#CFCFCF;
+              color:<% if [ $led_st = "OFF" ]; then echo "Blue"; else echo "Red"; fi %> ">
+               <%= $led_st %></textaera>
+		</fieldset></fieldset>
+       </div>
+
+      </form>
+   </body>
+</html

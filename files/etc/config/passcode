@@ -1,0 +1,5 @@
+
+config user 'general'
+	option id '00012'
+	option code '123'
+

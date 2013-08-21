@@ -1,0 +1,90 @@
+#! /bin/sh -ax
+
+toggle(){
+
+      led_vl=$(cat /sys/class/leds/tp-link\:blue\:system/brightness)
+       if [ "$led_vl" = "0" ]; then
+               echo 255 > /sys/class/leds/tp-link\:blue\:system/brightness
+#              led_st="ON"
+       else
+              echo 0 > /sys/class/leds/tp-link\:blue\:system/brightness
+#              led_st="OFF"
+     fi
+}
+
+CONTENT_STRING=`dd count=$CONTENT_LENGTH bs=1 2> /dev/null`"&" 
+passtring=${CONTENT_STRING%%&*}
+pwd=${passtring#*password=}
+pwd="'"$pwd"'"
+
+codefile=$(cat /etc/config/passcode)
+passcode=${codefile#*code}
+
+#passcode=${passcode#*\'}
+#passcode=${passcode%\'*}
+
+if [ "$QUERY_STRING"x = "ON"x ]; then
+
+#    if [ "$led_vl" = "0" ]; then
+        echo 255 > /sys/class/leds/tp-link\:blue\:system/brightness
+#     fi  
+#             led_st="ON"
+elif [ "$QUERY_STRING"x = "OFF"x ]; then
+#            if [ "$led_vl" != "0" ]; then
+                 echo 0 > /sys/class/leds/tp-link\:blue\:system/brightness
+#           fi   
+#            led_st="OFF"
+elif [ "$QUERY_STRING"x = "Toggle"x ]; then
+             toggle                   
+              msg="Toggle"
+elif [ "$QUERY_STRING"x = "Go"x ]; then
+           if [ $pwd = $passcode ]; then
+             toggle
+             msg="OK"
+           else
+             msg="Denied" 
+           fi
+#else
+#     if [ "$led_vl" = "0" ]; then
+#                 led_st="OFF"
+#     els 
+#                 led_st="ON"
+#    fi
+
+
+fi
+
+
+
+
+led_vl=$(cat /sys/class/leds/tp-link\:blue\:system/brightness)
+if [ $led_vl = "0" ]; then
+   led_st="OFF"
+else 
+   led_st="ON"
+fi
+
+                              
+
+echo "Content-type: text/html"       
+echo ""                              
+echo "<html><head><title>LED</title>"
+echo "</head><body>"              
+echo "<!--  <status>$led_st</status> <message>$msg</message> -->"
+
+echo "password:"$passcode"<br>"
+#echo $pwd
+
+
+echo "<h1>LED Status:$led_st"       
+
+echo "<div align=\"center\"> <h1><br> "
+echo "<a href =\"ctrled?ON\">LED on</a><br><br><br> " 
+echo "<a href =\"ctrled?Toggle\">Toggle</a><br><br>"
+
+echo "<form action=\"ctrled?Go\" method = \"POST\">"
+echo "<input type=\"password\" name=\"password\" />"
+echo "<input type=\"submit\" value=\"Pass by code\" name=\"toggle\" />"
+echo "</form>"
+
+echo "</div></body></html>"
